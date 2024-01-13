@@ -17,3 +17,19 @@ jobs:
           cargo fmt --all -- --check
           cargo check
           cargo test --all-features
+  proto-packet:
+    name: Build & Test [proto-packet]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: proto-packet/proto-packet-core
+        run: |
+          cd ./proto-packet/proto-packet-core
+          cargo fmt --all -- --check
+          cargo check
+          cargo test --all-features
