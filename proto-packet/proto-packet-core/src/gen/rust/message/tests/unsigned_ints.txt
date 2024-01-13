@@ -4,3 +4,21 @@ pub struct UnsignedInts {
     three: Option<u32>,
     four: Option<u64>,
 }
+
+impl UnsignedInts {
+    pub fn one(&self) -> Option<u8> {
+        self.one
+    }
+
+    pub fn two(&self) -> Option<u16> {
+        self.two
+    }
+
+    pub fn three(&self) -> Option<u32> {
+        self.three
+    }
+
+    pub fn four(&self) -> Option<u64> {
+        self.four
+    }
+}

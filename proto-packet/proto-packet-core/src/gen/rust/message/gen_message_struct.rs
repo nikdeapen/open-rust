@@ -44,7 +44,7 @@ impl<'a> GenMessageStruct<'a> {
     /// Generates the struct field for the message field.
     fn gen_field(&self, field: &MessageField) -> Result<StructField, Error> {
         let name: String = self.naming.type_name(field.name())?;
-        let type_tag: RustType = self.typing.field_type(field.type_tag())?.to_option();
+        let type_tag: RustType = self.typing.field_type(field.type_tag())?;
         Ok(StructField::from((name, type_tag)))
     }
 }
