@@ -11,3 +11,6 @@ license = "MIT"
 
 [dependencies]
 code-gen = { path = "../../util/code-gen" }
+
+[features]
+rust = ["code-gen/rust"]

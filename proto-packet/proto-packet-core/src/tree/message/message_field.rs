@@ -1,6 +1,8 @@
 use std::fmt::{Display, Formatter};
 
-use crate::tree::{Var, WithFieldNumber};
+use code_gen::WithName;
+
+use crate::tree::{TypeTag, Var, WithFieldNumber, WithTypeTag, WithVar};
 
 /// A field of a message.
 #[derive(Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Debug)]
@@ -15,6 +17,24 @@ impl<V: Into<Var>> From<V> for MessageField {
             var: var.into(),
             field_number: None,
         }
+    }
+}
+
+impl WithName for MessageField {
+    fn name(&self) -> &str {
+        self.var.name()
+    }
+}
+
+impl WithTypeTag for MessageField {
+    fn type_tag(&self) -> &TypeTag {
+        self.var.type_tag()
+    }
+}
+
+impl WithVar for MessageField {
+    fn var(&self) -> &Var {
+        &self.var
     }
 }
 
