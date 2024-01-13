@@ -1,5 +1,7 @@
 use std::fmt::{Display, Formatter};
 
+use crate::{Expression, Statement};
+
 /// Responsible for buffering code.
 #[derive(Clone, Debug)]
 pub struct CodeBuffer {
@@ -93,6 +95,30 @@ impl CodeBuffer {
     /// Clears the buffered code.
     pub fn clear(&mut self) {
         self.code.clear();
+    }
+}
+
+impl CodeBuffer {
+    //! Display
+
+    /// Converts the expression to a string using the default code buffer.
+    pub fn display_expression<E>(expression: &E) -> String
+    where
+        E: Expression,
+    {
+        let mut b: CodeBuffer = CodeBuffer::default();
+        expression.write(&mut b);
+        b.export()
+    }
+
+    /// Converts the statement to a string using the default code buffer.
+    pub fn display_statement<S>(statement: &S) -> String
+    where
+        S: Statement,
+    {
+        let mut b: CodeBuffer = CodeBuffer::default();
+        statement.write(&mut b, 0);
+        b.export()
     }
 }
 
