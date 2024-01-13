@@ -81,7 +81,7 @@ impl Expression for TypeTag {
 
 #[cfg(test)]
 mod tests {
-    use crate::rust::PrimitiveType::{UnsignedInt16, UnsignedInt8};
+    use crate::rust::PrimitiveType::*;
     use crate::rust::TypeTag;
     use crate::rust::TypeTag::Generic;
     use crate::CodeBuffer;
@@ -99,7 +99,7 @@ mod tests {
 
     #[test]
     fn write_generic() {
-        let tag: TypeTag = Generic((Box::new("MyType"), Vec::default()));
+        let tag: TypeTag = Generic((Box::new("MyType".into()), Vec::default()));
         let result: String = CodeBuffer::display_expression(&tag);
         assert_eq!(result, "MyType");
 
