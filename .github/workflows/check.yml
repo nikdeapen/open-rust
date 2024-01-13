@@ -1,0 +1,19 @@
+on: [pull_request]
+name: Check
+jobs:
+  util:
+    name: Build & Test [util]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: util/code-gen
+        run: |
+          cd ./util/code-gen
+          cargo fmt --all -- --check
+          cargo check
+          cargo test --all-features
