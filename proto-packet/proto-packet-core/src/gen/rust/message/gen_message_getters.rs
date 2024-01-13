@@ -39,7 +39,7 @@ impl<'a> GenMessageGetters<'a> {
 impl<'a> GenMessageGetters<'a> {
     //! Getter Functions
 
-    /// Generates the getters impl block for the message.
+    /// Generates the getter function for the message field.
     fn gen_getter_fn(&self, field: &MessageField) -> Result<Function, Error> {
         if self.typing.is_copy(field.type_tag()) {
             let field_name: String = self.naming.field_name(field.name())?;
