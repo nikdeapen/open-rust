@@ -2,14 +2,18 @@ use crate::rust::TypeTag;
 use crate::{CodeBuffer, Expression};
 
 /// An element with an optional result.
-pub trait WithResult {
+pub trait WithResult: Sized {
     /// Gets the optional result.
     fn result(&self) -> Option<&TypeTag>;
 
     /// Sets the result.
-    fn with_result<T>(self, result: T) -> Self
+    fn with_result<T>(mut self, result: T) -> Self
     where
-        T: Into<TypeTag>;
+        T: Into<TypeTag>,
+    {
+        self.set_result(result);
+        self
+    }
 
     /// Sets the result.
     fn set_result<T>(&mut self, result: T)

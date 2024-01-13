@@ -42,14 +42,6 @@ impl WithVarParams for Signature {
         self.params.as_slice()
     }
 
-    fn with_param<V>(mut self, param: V) -> Self
-    where
-        V: Into<Var>,
-    {
-        self.add_param(param);
-        self
-    }
-
     fn add_param<V>(&mut self, param: V)
     where
         V: Into<Var>,
@@ -61,14 +53,6 @@ impl WithVarParams for Signature {
 impl WithResult for Signature {
     fn result(&self) -> Option<&TypeTag> {
         self.result.as_ref()
-    }
-
-    fn with_result<T>(mut self, result: T) -> Self
-    where
-        T: Into<TypeTag>,
-    {
-        self.set_result(result);
-        self
     }
 
     fn set_result<T>(&mut self, result: T)

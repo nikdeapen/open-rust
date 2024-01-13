@@ -2,14 +2,18 @@ use crate::rust::Var;
 use crate::{CodeBuffer, Expression};
 
 /// An element with variable parameters.
-pub trait WithVarParams {
+pub trait WithVarParams: Sized {
     /// Gets the parameters.
     fn params(&self) -> &[Var];
 
     /// Adds the parameter.
-    fn with_param<V>(self, param: V) -> Self
+    fn with_param<V>(mut self, param: V) -> Self
     where
-        V: Into<Var>;
+        V: Into<Var>,
+    {
+        self.add_param(param);
+        self
+    }
 
     /// Adds the parameter.
     fn add_param<V>(&mut self, param: V)
