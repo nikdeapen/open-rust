@@ -1,4 +1,4 @@
-use crate::rust::{Function, TypeTag, WithFunctions};
+use crate::rust::{Function, TypeTag, WithFunctions, WithTypeTag};
 use crate::{CodeBuffer, Expression, Statement};
 
 /// A struct impl block.
@@ -13,6 +13,12 @@ impl<T: Into<TypeTag>> From<T> for ImplBlock {
             base: base.into(),
             functions: Vec::default(),
         }
+    }
+}
+
+impl WithTypeTag for ImplBlock {
+    fn type_tag(&self) -> &TypeTag {
+        &self.base
     }
 }
 
@@ -43,5 +49,35 @@ impl Statement for ImplBlock {
             self.write_functions(b, level + 1);
             b.line(level, "}");
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::rust::PrimitiveType::UnsignedInt32;
+    use crate::rust::{ImplBlock, WithFunctions};
+    use crate::CodeBuffer;
+
+    #[test]
+    fn write_empty() {
+        let block: ImplBlock = UnsignedInt32.into();
+        let result: String = CodeBuffer::display_statement(&block);
+        let expected: &str = "impl u32 {}\n";
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn write_functions() {
+        let block: ImplBlock = UnsignedInt32.into();
+
+        let block: ImplBlock = block.with_function("one");
+        let result: String = CodeBuffer::display_statement(&block);
+        let expected: &str = "impl u32 {\n\tfn one() {}\n}\n";
+        assert_eq!(result, expected);
+
+        let block: ImplBlock = block.with_function("two");
+        let result: String = CodeBuffer::display_statement(&block);
+        let expected: &str = "impl u32 {\n\tfn one() {}\n\n\tfn two() {}\n}\n";
+        assert_eq!(result, expected);
     }
 }
