@@ -1,0 +1,6 @@
+pub struct UnsignedInts {
+    one: Option<u8>,
+    two: Option<u16>,
+    three: Option<u32>,
+    four: Option<u64>,
+}
