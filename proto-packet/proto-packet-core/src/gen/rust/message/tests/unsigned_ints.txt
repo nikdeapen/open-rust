@@ -13,6 +13,13 @@ impl UnsignedInts {
     pub fn one(&self) -> Option<u8> {
         self.one
     }
+
+    /// Sets the 'one' field.
+    pub fn set_one(&mut self) -> Option<u8> {
+        let old_value: Option<u8> = self.one;
+        self.one = one;
+        old_value;
+    }
 }
 
 impl UnsignedInts {
@@ -21,6 +28,13 @@ impl UnsignedInts {
     /// Gets the 'two' field.
     pub fn two(&self) -> Option<u16> {
         self.two
+    }
+
+    /// Sets the 'two' field.
+    pub fn set_two(&mut self) -> Option<u16> {
+        let old_value: Option<u16> = self.two;
+        self.two = two;
+        old_value;
     }
 }
 
@@ -31,6 +45,13 @@ impl UnsignedInts {
     pub fn three(&self) -> Option<u32> {
         self.three
     }
+
+    /// Sets the 'three' field.
+    pub fn set_three(&mut self) -> Option<u32> {
+        let old_value: Option<u32> = self.three;
+        self.three = three;
+        old_value;
+    }
 }
 
 impl UnsignedInts {
@@ -39,5 +60,12 @@ impl UnsignedInts {
     /// Gets the 'four' field.
     pub fn four(&self) -> Option<u64> {
         self.four
+    }
+
+    /// Sets the 'four' field.
+    pub fn set_four(&mut self) -> Option<u64> {
+        let old_value: Option<u64> = self.four;
+        self.four = four;
+        old_value;
     }
 }
