@@ -26,3 +26,16 @@ impl Expression for FieldExp {
         b.write(self.field_name.as_str());
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::rust::FieldExp;
+    use crate::CodeBuffer;
+
+    #[test]
+    fn write() {
+        let field_exp: FieldExp = "field_name".into();
+        let result: String = CodeBuffer::display_expression(&field_exp);
+        assert_eq!(result, "self.field_name");
+    }
+}

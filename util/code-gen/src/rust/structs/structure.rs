@@ -1,9 +1,11 @@
+use crate::rust::structs::with_derives::WithDerives;
 use crate::rust::{Access, StructField, WithAccess, WithStructFields};
 use crate::{CodeBuffer, Statement, WithName};
 
 /// A struct declaration.
 #[derive(Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Debug)]
 pub struct Struct {
+    derives: Vec<String>,
     access: Access,
     name: String,
     fields: Vec<StructField>,
@@ -12,10 +14,24 @@ pub struct Struct {
 impl<S: Into<String>> From<S> for Struct {
     fn from(name: S) -> Self {
         Self {
+            derives: Vec::default(),
             access: Access::default(),
             name: name.into(),
             fields: Vec::default(),
         }
+    }
+}
+
+impl WithDerives for Struct {
+    fn derives(&self) -> &[String] {
+        self.derives.as_slice()
+    }
+
+    fn add_derive<S>(&mut self, derive: S)
+    where
+        S: Into<String>,
+    {
+        self.derives.push(derive.into());
     }
 }
 
@@ -53,6 +69,7 @@ impl WithStructFields for Struct {
 
 impl Statement for Struct {
     fn write(&self, b: &mut CodeBuffer, level: usize) {
+        self.write_derives(b, level);
         b.indent(level);
         self.write_access(b);
         b.write("struct ");
@@ -71,6 +88,7 @@ impl Statement for Struct {
 
 #[cfg(test)]
 mod tests {
+    use crate::rust::structs::with_derives::WithDerives;
     use crate::rust::PrimitiveType::*;
     use crate::rust::{Access, Struct, WithAccess, WithStructFields};
     use crate::CodeBuffer;
@@ -80,6 +98,24 @@ mod tests {
         let structure: Struct = "MyStruct".into();
         let result: String = CodeBuffer::display_statement(&structure);
         assert_eq!(result, "struct MyStruct {}\n");
+    }
+
+    #[test]
+    fn write_derives() {
+        let structure: Struct = Struct::from("MyStruct").with_derive("Copy");
+        let result: String = CodeBuffer::display_statement(&structure);
+        assert_eq!(result, "#[derive(Copy)]\nstruct MyStruct {}\n");
+
+        let structure: Struct = structure.with_derive("Clone");
+        let result: String = CodeBuffer::display_statement(&structure);
+        assert_eq!(result, "#[derive(Copy, Clone)]\nstruct MyStruct {}\n");
+
+        let structure: Struct = structure.with_derive("Debug");
+        let result: String = CodeBuffer::display_statement(&structure);
+        assert_eq!(
+            result,
+            "#[derive(Copy, Clone, Debug)]\nstruct MyStruct {}\n"
+        );
     }
 
     #[test]
