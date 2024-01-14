@@ -1,5 +1,7 @@
 use code_gen::rust::Access::Public;
-use code_gen::rust::{Struct, StructField, TypeTag as RustType, WithAccess, WithStructFields};
+use code_gen::rust::{
+    Struct, StructField, TypeTag as RustType, WithAccess, WithDerives, WithStructFields,
+};
 use code_gen::WithName;
 
 use crate::gen::rust::{Naming, Typing};
@@ -30,11 +32,36 @@ impl<'a> GenMessageStruct<'a> {
         let mut structure: Struct =
             Struct::from(self.naming.type_name(message.name())?).with_access(Public);
 
+        self.gen_derives(message, &mut structure)?;
+
         for field in message.fields() {
             structure.add_field(self.gen_field(field)?);
         }
 
         Ok(structure)
+    }
+}
+
+impl<'a> GenMessageStruct<'a> {
+    //! Derives
+
+    fn gen_derives(&self, message: &Message, structure: &mut Struct) -> Result<(), Error> {
+        let copy: bool = message
+            .fields()
+            .iter()
+            .all(|f| self.typing.is_copy(f.type_tag()));
+        if copy {
+            structure.add_derive("Copy");
+        }
+        structure.add_derive("Clone");
+        structure.add_derive("Ord");
+        structure.add_derive("PartialOrd");
+        structure.add_derive("Eq");
+        structure.add_derive("PartialEq");
+        structure.add_derive("Hash");
+        structure.add_derive("Debug");
+
+        Ok(())
     }
 }
 

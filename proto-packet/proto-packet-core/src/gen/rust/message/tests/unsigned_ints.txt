@@ -1,3 +1,4 @@
+#[derive(Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Debug)]
 pub struct UnsignedInts {
     one: Option<u8>,
     two: Option<u16>,
@@ -6,18 +7,36 @@ pub struct UnsignedInts {
 }
 
 impl UnsignedInts {
+    //! Field: one: u8 = 1;
+
+    /// Gets the 'one' field.
     pub fn one(&self) -> Option<u8> {
         self.one
     }
+}
 
+impl UnsignedInts {
+    //! Field: two: u16 = 2;
+
+    /// Gets the 'two' field.
     pub fn two(&self) -> Option<u16> {
         self.two
     }
+}
 
+impl UnsignedInts {
+    //! Field: three: u32 = 3;
+
+    /// Gets the 'three' field.
     pub fn three(&self) -> Option<u32> {
         self.three
     }
+}
 
+impl UnsignedInts {
+    //! Field: four: u64 = 4;
+
+    /// Gets the 'four' field.
     pub fn four(&self) -> Option<u64> {
         self.four
     }
