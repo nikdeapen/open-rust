@@ -1,5 +1,6 @@
 use code_gen::rust::{
-    gen_getter_fn_copy, Function, ImplBlock, TypeTag as RustType, WithComments, WithFunctions,
+    gen_getter_fn_copy, gen_setter_fn_copy, Function, ImplBlock, TypeTag as RustType, WithComments,
+    WithFunctions,
 };
 use code_gen::WithName;
 
@@ -49,14 +50,18 @@ impl<'a> GenMessageField<'a> {
 impl<'a> GenMessageField<'a> {
     //! UnsignedInt8
 
-    /// Generates the impl block for a 'u8' field.
+    /// Generates the impl block for a field that is `Copy`.
     fn gen_copy(&self, field: &MessageField, block: &mut ImplBlock) -> Result<(), Error> {
         let field_name: String = self.naming.field_name(field.name())?;
         let rust_type: RustType = self.typing.field_type(field.type_tag())?;
 
-        let getter: Function = gen_getter_fn_copy(field_name, rust_type)
+        let getter: Function = gen_getter_fn_copy(field_name.clone(), rust_type.clone())
             .with_comment(format!("Gets the '{}' field.", field.name()));
         block.add_function(getter);
+
+        let setter: Function = gen_setter_fn_copy(field_name, rust_type)
+            .with_comment(format!("Sets the '{}' field.", field.name()));
+        block.add_function(setter);
 
         Ok(())
     }
